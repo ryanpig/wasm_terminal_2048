@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="xtermjs/xterm.css" />
+    <script src="xtermjs/xterm.js"></script>
+    <style>
+      #terminal {
+        height: 50%;
+      }
+    </style>
+           
+    <style>
+    .button {
+      border: none;
+      color: blue;
+    }
+    </style>
+    <meta charset="utf-8">
+    <title>WASM 2048 in terminal</title>
+  </head>
+  <body>
+    <script type="module">
+      const terminal = new Terminal(); 
+      terminal.setOption('cursorBlink', false);
+      terminal.open(document.getElementById("terminal"));
+
+      import App from "./app.js";
+      import init, { GameController } from "./wasm_terminal_2048_web.js";
+
+      let wasm;
+      init()
+      .then(_wasm => {
+        wasm = _wasm;
+        const gameController = GameController.new();
+        const app = new App(gameController, terminal);
+        app.run();
+      })
+      .catch(error => terminal.writeln(error.message));
+    </script>
+
+    <div id="terminal"></div>
+    <p> Click on the terminal and start a play
+
+  </body>
+</html>

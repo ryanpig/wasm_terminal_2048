@@ -1,0 +1,13 @@
+{
+  "name": "wasm_terminal_2048_web",
+  "collaborators": [
+    "ryanpig <ryanpig@gmail.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "wasm_terminal_2048_web_bg.wasm",
+    "wasm_terminal_2048_web.js"
+  ],
+  "module": "wasm_terminal_2048_web.js",
+  "sideEffects": false
+}

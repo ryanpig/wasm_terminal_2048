@@ -14,7 +14,7 @@ impl Game {
         }
     }
 
-    // used for test only
+    #[cfg(test)]
     fn new_with_values(values: Vec<u16>) -> Self {
         Self {
             board: Board::new(values),
@@ -24,7 +24,7 @@ impl Game {
 
     pub fn start_game(&mut self) {
         self.reset_game();
-        let r = self.board.generate_new_tile();
+        self.board.generate_new_tile();
     }
     
 
@@ -49,10 +49,6 @@ impl Game {
         let r = self.board.generate_new_tile();
         self.steps += if r {1} else {0};
         r
-    }
-
-    fn draw(&mut self) {
-        println!("{}", self.board);
     }
 
     fn reset_game(&mut self) {

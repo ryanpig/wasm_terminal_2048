@@ -1,0 +1,12 @@
+[package]
+name = "wasm_terminal_2048_cli"
+version = "0.1.0"
+authors = ["ryanpig <ryanpig@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+termion = "1.5.5"
+transpose = "0.2.0"
+rand = "0.8.0" 
+wasm_terminal_2048 = { path = "../" }
+

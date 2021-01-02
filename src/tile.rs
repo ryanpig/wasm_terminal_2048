@@ -1,17 +1,3 @@
-///
-/// Tile:
-/// 1. Move
-/// 2. Incremental (power of 2)
-/// 3. Merge 
-/// 4. Change Color by values
-///
-/// Game:
-/// 1. Board made by 16 tiles
-/// 2. Each iteration
-///     - generate new tiles
-///
-
-use termion::color;
 use transpose;
 use rand::Rng;
 use rand::prelude::ThreadRng;
@@ -19,7 +5,7 @@ use rand::prelude::ThreadRng;
 use std::fmt::{Display, Formatter};
 
 pub enum Direction {
-    Left, Right, Up, Down
+    Left = 0, Right = 1, Up = 2, Down
 }
 
 pub struct Board {
@@ -122,18 +108,22 @@ impl Board {
             rng: rand::thread_rng(),
         }
     }
-
-    fn get_color(&self, val: u16) -> color::Fg<color::Rgb>{
+    fn get_color(&self, val: u16) -> &str {
         match val {
-            1..=4 => color::Fg(color::Rgb(200, 200, 0)),
-            8..=32 => color::Fg(color::Rgb(255, 177, 121)),
-            64..=256 => color::Fg(color::Rgb(255, 100, 59)),
-            512..=1024 => color::Fg(color::Rgb(70, 200, 200)),
-            2048 => color::Fg(color::Rgb(255, 255, 255)),
-            _ => color::Fg(color::Rgb(127, 127, 127)),
+            1..=4 => "\x1b[31;1m",
+            8..=32 => "\x1b[33;1m",
+            64..=128 => "\x1b[35;1m",
+            256..=256 => "\x1b[32;1m",
+            512..=1024 => "\x1b[36;1m",
+            2048 => "\x1b[38;1m",
+            _ => "\x1b[40;1m",
         }
     }
-    
+
+    fn get_color_reset(&self) -> &str {
+        "\x1b[0m"
+    }
+
     fn rows(&self) -> [Vec<u16>; 4] {
         let mut row1: Vec<u16> = vec![0;4];
         let mut row2: Vec<u16> = vec![0;4];
@@ -155,7 +145,6 @@ impl Board {
         let mut start = 0;
         let mut end = 4;
         for row in self.rows().iter() {
-             // println!("{:?}", row);
              match dir {
                Direction::Left => {self.values.splice(start..end, move_row_left(row));}, 
                Direction::Right => {self.values.splice(start..end, move_row_right(row));}, 
@@ -164,7 +153,6 @@ impl Board {
              start += 4; 
              end += 4;
         }
-        // println!("{:?}", self.values);
     }
 
     fn transpose(&mut self) {
@@ -249,13 +237,13 @@ impl Board {
                                 p = padding, 
                                 c = self.get_color(*value), 
                                 v = if *value > 0 { &val_str } else {" "}, 
-                                r = color::Fg(color::Reset)))
+                                r = self.get_color_reset()))
                   }, 
                   i if i % 4 == 3 => { 
                     texts.push_str( &format!("║{c}{v:^7}{r}║{n}", 
                             c = self.get_color(*value), 
                             v = if *value > 0 { &val_str } else {" "}, 
-                            r = color::Fg(color::Reset), 
+                            r = self.get_color_reset(),
                             n = newline));
                     if i != 15 {
                       texts.push_str( &format!("{p}╠═══════╬═══════╬═══════╬═══════╣{n}", 
@@ -266,7 +254,7 @@ impl Board {
                     texts.push_str( &format!("║{c}{v:^7}{r}", 
                             c = self.get_color(*value), 
                             v = if *value > 0 { &val_str } else {" "}, 
-                            r = color::Fg(color::Reset)));
+                            r = self.get_color_reset()));
                   }
              }
         }
@@ -301,9 +289,7 @@ mod tests {
            values.push(if i != 0 {1 << i} else {0});
         }
         let board = Board::new(values);
-        // println!("{}", board);
-        // assert_eq!(format!("{}", board), expected_output);
-
+        println!("{}", board);
     }
 
     #[test]

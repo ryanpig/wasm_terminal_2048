@@ -1,12 +1,24 @@
 [package]
-name = "wasm-terminal-2048-rs"
+name = "wasm_terminal_2048"
 version = "0.1.0"
 authors = ["ryanpig <ryanpig@gmail.com>"]
 edition = "2018"
+readme = "README.md"
+license = "MIT"
+description = "Game 2048 in both Webassembly and commandline"
+homepage = "https://github.com/ryanpig/wasm_terminal_2048"
+repository= "https://github.com/ryanpig/wasm_terminal_2048"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+exclude = [
+  "cli/*",
+  "wasm/*"
+]
+
+[workspace]
+members = [ ".", "cli", "wasm"]
 
 [dependencies]
-termion = "1.5.5"
+# termion = "1.5.5"
 transpose = "0.2.0"
-rand = "0.8.0"
+rand = {version = "0.8.0", features = ["std_rng"]}
+getrandom = {version = "0.2.0", features = ["js"]}
