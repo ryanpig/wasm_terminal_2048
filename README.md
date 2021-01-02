@@ -23,7 +23,7 @@ Note: build NodeJS package by changing the build options in `wasm-pack` in `buil
 - [crate.io](https://docs.rs/wasm_terminal_2048)
 
 ## Features
-- Play 2048 in either command line driven by the crate [termion](https://docs.rs/termion/1.5.5/termion/)) or browser driven by the JS library [xtermjs](https://xtermjs.org/))
+- Play 2048 in either command line terminal driven by the Rust crate [termion](https://docs.rs/termion/1.5.5/termion/) or browser terminal driven by the JS library [xtermjs](https://xtermjs.org/)
 - The game logic is encapsulated in the library, that can be shared with different front-end
 
 ## LICENCE
