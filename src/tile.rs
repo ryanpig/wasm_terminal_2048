@@ -1,13 +1,18 @@
 use transpose;
 use rand::Rng;
 use rand::prelude::ThreadRng;
-
 use std::fmt::{Display, Formatter};
 
+
+/// Directions of moving tiles
 pub enum Direction {
     Left = 0, Right = 1, Up = 2, Down
 }
 
+/// `Board` includes 16 tile values and a random generator for a new tile gneration. 
+/// Also, it includes methods for the tile movement and how to display a board 
+/// with internal tiles.
+///
 pub struct Board {
     values: Vec<u16>,
     rng: ThreadRng,
@@ -36,6 +41,7 @@ impl Display for Board {
 //     unimplemented!()
 // }
 
+/// Moving single row toward left 
 fn move_row_left(row: &Vec<u16>) -> Vec<u16> {
     // TODO: use reverse iterator to avoid extra one clone and two reverse opeartions 
     let mut row_rev = row.clone();
@@ -45,6 +51,7 @@ fn move_row_left(row: &Vec<u16>) -> Vec<u16> {
     result
 }
 
+/// Moving single row toward right
 fn move_row_right(row: &Vec<u16>) -> Vec<u16> {
     let mut pre_value = std::u16::MAX; 
     let mut new_row = Vec::with_capacity(row.len());
@@ -102,28 +109,37 @@ fn move_row_right(row: &Vec<u16>) -> Vec<u16> {
 
 
 impl Board {
+    /// Create a new `Board` object with the given tile values
+    ///
+    /// # Arguments
+    /// * `values` 16 tile values
+    ///
     pub fn new(val: Vec<u16>) -> Self {
         Board { 
             values: val,
             rng: rand::thread_rng(),
         }
     }
+
+    /// Change the tile color based on the tile value
     fn get_color(&self, val: u16) -> &str {
         match val {
-            1..=4 => "\x1b[31;1m",
-            8..=32 => "\x1b[33;1m",
-            64..=128 => "\x1b[35;1m",
-            256..=256 => "\x1b[32;1m",
+            1..=4      => "\x1b[31;1m",
+            8..=32     => "\x1b[33;1m",
+            64..=128   => "\x1b[35;1m",
+            256..=256  => "\x1b[32;1m",
             512..=1024 => "\x1b[36;1m",
-            2048 => "\x1b[38;1m",
-            _ => "\x1b[40;1m",
+            2048       => "\x1b[38;1m",
+            _          => "\x1b[40;1m",
         }
     }
 
+    /// Reset tile color  
     fn get_color_reset(&self) -> &str {
         "\x1b[0m"
     }
 
+    /// Return rows of the board 
     fn rows(&self) -> [Vec<u16>; 4] {
         let mut row1: Vec<u16> = vec![0;4];
         let mut row2: Vec<u16> = vec![0;4];
@@ -136,11 +152,12 @@ impl Board {
         [row1, row2, row3, row4]
     }
 
-
+    /// Get tile values
     pub fn get_values(&self) -> &Vec<u16> {
         &self.values
     }
 
+    /// Move the all tiles in the horizontal direction
     fn move_horizontal(&mut self, dir: Direction) {
         let mut start = 0;
         let mut end = 4;
@@ -155,11 +172,13 @@ impl Board {
         }
     }
 
+    /// Transpose the current tiles  
     fn transpose(&mut self) {
         let mut scratch = vec![0; 4];
         transpose::transpose_inplace(&mut self.values, &mut scratch, 4, 4);
     }
 
+    /// Move the all tiles in the vertical direction
     fn move_vertical(&mut self, dir: Direction) {
         // TODO: we use two extra transpose actions that allow all directions use the same logics. But it's not optimal process
         self.transpose();
@@ -171,26 +190,32 @@ impl Board {
         self.transpose();
     }
 
+    /// Move up all tiles 
     pub fn move_up(&mut self) {
         self.move_vertical(Direction::Up);
     }
 
+    /// Move down all tiles 
     pub fn move_down(&mut self) {
         self.move_vertical(Direction::Down);
     }
 
+    /// Move left all tiles 
     pub fn move_left(&mut self) {
         self.move_horizontal(Direction::Left);
     }
 
+    /// Move right all tiles 
     pub fn move_right(&mut self) {
         self.move_horizontal(Direction::Right);
     }
 
+    /// Set a single tile by the given value
     fn set_tile_value(&mut self, index: u8, value: u16) {
         self.values[index as usize] = value;
     }
 
+    /// Find an empty tile and set the tile by a random value
     pub fn generate_new_tile(&mut self) -> bool {
         // get all zero tile 
         let mut zero_list = Vec::new();
@@ -213,13 +238,14 @@ impl Board {
         }
     }
 
+    /// Reset all tile values to 0
     pub fn reset(&mut self) {
         for val in self.values.iter_mut() {
             *val = 0;
         }
     }
 
-    /// board drawing
+    /// Used for Display trait, that returns a drawn board 
     pub fn draw(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
         let mut texts = String::new();
         let newline  = "\n\r";
