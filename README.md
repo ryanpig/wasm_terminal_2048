@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/ryanpig/wasm_terminal_2048.svg?branch=main)](https://travis-ci.com/ryanpig/wasm_terminal_2048)
+
 # wasm-terminal-2048
 The game 2048 is written in Rust that can be played with the GUI in a command line terminal or a browser by using webassembly. Both share the same library that contains the game logic.  
 
