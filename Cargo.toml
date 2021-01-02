@@ -7,7 +7,8 @@ readme = "README.md"
 license = "MIT"
 description = "Game 2048 in both Webassembly and commandline"
 homepage = "https://github.com/ryanpig/wasm_terminal_2048"
-repository= "https://github.com/ryanpig/wasm_terminal_2048"
+repository = "https://github.com/ryanpig/wasm_terminal_2048"
+keywords = ["gamedev", "2048", "webassembly"]
 
 exclude = [
   "cli/*",

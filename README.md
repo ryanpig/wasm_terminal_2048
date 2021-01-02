@@ -19,8 +19,8 @@ Note: build NodeJS package by changing the build options in `wasm-pack` in `buil
 [wasm-pack build options](https://rustwasm.github.io/wasm-pack/book/commands/build.html)
 
 ## Documentation
-TODO
-
+- (local build) `cargo doc --open`
+- [crate.io](https://docs.rs/wasm_terminal_2048)
 
 ## Features
 - Play 2048 in either command line driven by the crate [termion](https://docs.rs/termion/1.5.5/termion/)) or browser driven by the JS library [xtermjs](https://xtermjs.org/))
