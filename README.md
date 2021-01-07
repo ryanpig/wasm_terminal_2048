@@ -5,7 +5,7 @@ The game 2048 is written in Rust that can be played with the GUI in a command li
 
 ## Demo 
 ### Command line (Left) / Browser (Right)
-If you can find the demo website [Here](https://wasm-terminal-2048.web.app/).
+The demo website is available at [Here](https://wasm-terminal-2048.web.app/).
 
 ![command line demo](screenshots/cli-demo.gif) ![browser demo](screenshots/wasm-demo.gif)
 
